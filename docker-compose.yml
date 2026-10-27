@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # 1. Official PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: school_erp_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword2026
+      POSTGRES_DB: school_erp
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./server/db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d school_erp"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. School ERP Full-Stack Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: school_erp_app
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: postgresql://postgres:postgrespassword2026@db:5432/school_erp
+      JWT_SECRET: institutional_super_secure_production_jwt_secret_key_2026
+      ADMIN_USERNAME: superadmin
+      ADMIN_PASSWORD: Admin@Secure2026
+      ADMIN_EMAIL: superadmin@institution.edu
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+    driver: local

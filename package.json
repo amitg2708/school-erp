@@ -1,0 +1,24 @@
+{
+  "name": "school-erp-platform",
+  "version": "1.0.0",
+  "description": "Enterprise Institutional School ERP Platform",
+  "private": true,
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "build": "npm --prefix client install && npm --prefix client run build && npm --prefix server install",
+    "start": "npm --prefix server start",
+    "server": "npm --prefix server run dev",
+    "client": "npm --prefix client run dev",
+    "db:migrate": "npm --prefix server run db:migrate",
+    "db:clean": "npm --prefix server run db:clean"
+  },
+  "keywords": [
+    "school-erp",
+    "education-management",
+    "postgresql",
+    "react",
+    "express"
+  ],
+  "author": "School ERP System",
+  "license": "ISC"
+}
